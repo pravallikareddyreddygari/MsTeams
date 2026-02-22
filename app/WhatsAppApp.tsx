@@ -49,6 +49,24 @@ export default function WhatsAppApp() {
     setNewMessage("");
   };
 
+  const getUnreadCount = (contactId: string) => {
+    return messages.filter((m) => m.contactId === contactId && m.sender !== "You" && !m.isRead).length;
+  };
+
+  const getLastMessage = (contactId: string) => {
+    const contactMessages = messages.filter((m) => m.contactId === contactId);
+    if (contactMessages.length === 0) return "";
+    const lastMessage = contactMessages[contactMessages.length - 1];
+    return lastMessage.text;
+  };
+
+  const getLastMessageTime = (contactId: string) => {
+    const contactMessages = messages.filter((m) => m.contactId === contactId);
+    if (contactMessages.length === 0) return "";
+    const lastMessage = contactMessages[contactMessages.length - 1];
+    return new Date(lastMessage.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
   const filteredContacts = contacts.filter((c) =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -64,6 +82,9 @@ export default function WhatsAppApp() {
         setActiveContact={setActiveContact}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        getUnreadCount={getUnreadCount}
+        getLastMessage={getLastMessage}
+        getLastMessageTime={getLastMessageTime}
       />
 
       <ChatWindow

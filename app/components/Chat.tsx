@@ -9,6 +9,7 @@ interface ChatProps {
   onSendMessage: (e: React.FormEvent) => void;
   newMessage: string;
   setNewMessage: (message: string) => void;
+  activeTab: "chat" | "activity" | "calls" | "files";
 }
 
 export default function Chat({
@@ -17,8 +18,10 @@ export default function Chat({
   onSendMessage,
   newMessage,
   setNewMessage,
+  activeTab,
 }: ChatProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const prevChannelId = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -26,9 +29,84 @@ export default function Chat({
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (channel && prevChannelId.current !== channel.id) {
+      prevChannelId.current = channel.id;
+    }
+  }, [channel?.id]);
+
+  if (activeTab !== "chat") {
+    return (
+      <div className="flex-1 flex flex-col bg-[#f3f2f1]">
+        <div className="h-14 bg-[#f3f2f1] px-4 flex items-center justify-between border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-[#0078d4] rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              #
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                {channel ? `#${channel.name}` : "Select a channel"}
+              </h2>
+              <p className="text-xs text-gray-500">
+                {channel ? "General discussion for this channel" : "Choose a channel to start chatting"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button className="p-2 text-gray-500 hover:bg-gray-200 rounded">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+              </svg>
+            </button>
+            <button className="p-2 text-gray-500 hover:bg-gray-200 rounded">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+            </button>
+            <button className="p-2 text-gray-500 hover:bg-gray-200 rounded">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v2H6v2h12v-2h-4v-2h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H4V4h16v10z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+              {activeTab === "activity" && (
+                <svg className="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              )}
+              {activeTab === "calls" && (
+                <svg className="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+              )}
+              {activeTab === "files" && (
+                <svg className="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v2H6v2h12v-2h-4v-2h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H4V4h16v10z" />
+                </svg>
+              )}
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {activeTab === "activity" && "Activity"}
+              {activeTab === "calls" && "Calls"}
+              {activeTab === "files" && "Files"}
+            </h3>
+            <p className="text-gray-500">
+              {activeTab === "activity" && "No recent activity"}
+              {activeTab === "calls" && "No recent calls"}
+              {activeTab === "files" && "No files shared yet"}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col bg-[#f3f2f1]">
-      {/* Header */}
       <div className="h-14 bg-[#f3f2f1] px-4 flex items-center justify-between border-b border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-[#0078d4] rounded-full flex items-center justify-center text-white font-semibold text-sm">
@@ -62,7 +140,6 @@ export default function Chat({
         </div>
       </div>
 
-      {/* Messages - Scrollable Area */}
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-2"
@@ -110,7 +187,6 @@ export default function Chat({
         )}
       </div>
 
-      {/* Input */}
       <div className="bg-[#f3f2f1] p-3 flex items-end space-x-2">
         <button className="p-2 text-gray-500 hover:bg-gray-200 rounded">
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

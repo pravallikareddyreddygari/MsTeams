@@ -8,6 +8,9 @@ interface ContactListProps {
   setActiveContact: (contactId: string) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  getUnreadCount: (contactId: string) => number;
+  getLastMessage: (contactId: string) => string;
+  getLastMessageTime: (contactId: string) => string;
 }
 
 export default function ContactList({
@@ -16,6 +19,9 @@ export default function ContactList({
   setActiveContact,
   searchQuery,
   setSearchQuery,
+  getUnreadCount,
+  getLastMessage,
+  getLastMessageTime,
 }: ContactListProps) {
   return (
     <div className="w-1/3 bg-[#e5ddd5] flex flex-col border-r border-gray-200">
@@ -69,33 +75,54 @@ export default function ContactList({
             <p>No chats found</p>
           </div>
         ) : (
-          contacts.map((contact) => (
-            <div
-              key={contact.id}
-              onClick={() => setActiveContact(contact.id)}
-              className={`flex items-center px-4 py-3 cursor-pointer border-b border-gray-200 transition-colors ${
-                activeContact === contact.id ? "bg-[#f0f2f5]" : "hover:bg-[#f5f6f6]"
-              }`}
-            >
-              <div className="relative">
-                <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl">
-                  {contact.avatar}
+          contacts.map((contact) => {
+            const unreadCount = getUnreadCount(contact.id);
+            const lastMessage = getLastMessage(contact.id);
+            const lastMessageTime = getLastMessageTime(contact.id);
+
+            return (
+              <div
+                key={contact.id}
+                onClick={() => setActiveContact(contact.id)}
+                className={`flex items-center px-4 py-3 cursor-pointer border-b border-gray-200 transition-colors ${
+                  activeContact === contact.id ? "bg-[#f0f2f5]" : "hover:bg-[#f5f6f6]"
+                }`}
+              >
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl">
+                    {contact.avatar}
+                  </div>
+                  {contact.status === "online" && (
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                  )}
                 </div>
-                {contact.status === "online" && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                )}
+                <div className="ml-4 flex-1 min-w-0">
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-gray-900 font-medium truncate">{contact.name}</h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500">{lastMessageTime}</span>
+                      {unreadCount > 0 && (
+                        <span className="bg-[#00a884] text-white text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[18px] text-center">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center mt-1">
+                    <p className="text-sm text-gray-500 truncate">
+                      {unreadCount > 0 && lastMessage ? (
+                        <span className="font-medium text-gray-900">
+                          {lastMessage}
+                        </span>
+                      ) : (
+                        lastMessage
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="ml-4 flex-1 min-w-0">
-                <div className="flex justify-between items-baseline">
-                  <h3 className="text-gray-900 font-medium truncate">{contact.name}</h3>
-                  <span className="text-xs text-gray-500">10:30 AM</span>
-                </div>
-                <div className="flex justify-between items-center mt-1">
-                  <p className="text-sm text-gray-500 truncate">Hello! How are you?</p>
-                </div>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
