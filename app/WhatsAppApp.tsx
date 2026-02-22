@@ -14,11 +14,17 @@ const contacts: Contact[] = [
 ];
 
 const messages: Message[] = [
-  { id: "m1", contactId: "u1", sender: "Alice", text: "Hello! How are you?", timestamp: new Date(Date.now() - 3600000).toISOString(), isRead: true },
-  { id: "m2", contactId: "u1", sender: "You", text: "I'm good, thanks! Working on the new feature.", timestamp: new Date(Date.now() - 3500000).toISOString(), isRead: true },
-  { id: "m3", contactId: "u1", sender: "Alice", text: "That sounds exciting! Let me know when you need a review.", timestamp: new Date(Date.now() - 3400000).toISOString(), isRead: true },
-  { id: "m4", contactId: "u2", sender: "Bob", text: "Can we meet at 3 PM?", timestamp: new Date(Date.now() - 1800000).toISOString(), isRead: false },
-  { id: "m5", contactId: "u3", sender: "Charlie", text: "Meeting started", timestamp: new Date(Date.now() - 900000).toISOString(), isRead: true },
+  { id: "m1", contactId: "u1", sender: "Alice", text: "Hey there! 👋", timestamp: new Date(Date.now() - 3600000).toISOString(), isRead: true },
+  { id: "m2", contactId: "u1", sender: "You", text: "Hi Alice! Long time no see. How are you?", timestamp: new Date(Date.now() - 3500000).toISOString(), isRead: true },
+  { id: "m3", contactId: "u1", sender: "Alice", text: "I'm doing great! Just finished a project. 🎉", timestamp: new Date(Date.now() - 3400000).toISOString(), isRead: true },
+  { id: "m4", contactId: "u1", sender: "Alice", text: "Want to catch up over coffee this weekend?", timestamp: new Date(Date.now() - 3300000).toISOString(), isRead: true },
+  { id: "m5", contactId: "u2", sender: "Bob", text: "Did you get my last message?", timestamp: new Date(Date.now() - 1800000).toISOString(), isRead: false },
+  { id: "m6", contactId: "u2", sender: "Bob", text: "We need to discuss the design changes.", timestamp: new Date(Date.now() - 1700000).toISOString(), isRead: false },
+  { id: "m7", contactId: "u3", sender: "Charlie", text: "Meeting reminder: 3 PM today 📅", timestamp: new Date(Date.now() - 900000).toISOString(), isRead: true },
+  { id: "m8", contactId: "u3", sender: "Charlie", text: "Don't forget to bring your laptop!", timestamp: new Date(Date.now() - 800000).toISOString(), isRead: true },
+  { id: "m9", contactId: "u4", sender: "Diana", text: "Sent you the files. Check your email! 📎", timestamp: new Date(Date.now() - 600000).toISOString(), isRead: true },
+  { id: "m10", contactId: "u5", sender: "Eve", text: "Happy Sunday! 🌞", timestamp: new Date(Date.now() - 300000).toISOString(), isRead: true },
+  { id: "m11", contactId: "u5", sender: "Eve", text: "Hope you have a great day!", timestamp: new Date(Date.now() - 200000).toISOString(), isRead: true },
 ];
 
 export default function WhatsAppApp() {
